@@ -26,14 +26,10 @@ import { Dispatch, SetStateAction } from 'react';
   
 
 export default function RecipeFormStepper({currentStepIndex, setCurrentStepIndex} : IStepperProps) {
-    // const { activeStep, setActiveStep } = useSteps({
-    //     index: currentStepIndex,
-    //     count: steps.length,
-    //   })
   return (
         <Stepper colorScheme='teal' index={currentStepIndex} > 
           {steps.map((step, index) => (
-            <Step key={index} onClick={() => setCurrentStepIndex(index + 1)}>
+            <Step key={index} onClick={() => setCurrentStepIndex(index)}>
               <StepIndicator>
                 <StepStatus
                   complete={<StepIcon />}
