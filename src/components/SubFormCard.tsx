@@ -1,4 +1,5 @@
 import { Box, CardHeader, CardBody, Heading, Input, Button, Text, ButtonGroup, Stack } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 
 interface IRecipeItems {
     item: string;
@@ -8,9 +9,11 @@ interface ISubFormProps {
     heading: string;
     recipeItems: Array<IRecipeItems>;
     removeItem: (index: number) => void;
+    addNewItem: (newItem: string) => void
 }
 
-export default function SubFormCard({heading, recipeItems, removeItem}: ISubFormProps) {
+export default function SubFormCard({heading, recipeItems, removeItem, addNewItem}: ISubFormProps) {
+    const [newItem, setNewItem] = useState('')
   return (
     <>
     <CardHeader>
@@ -27,9 +30,9 @@ export default function SubFormCard({heading, recipeItems, removeItem}: ISubForm
                 </>
             ))}
         </Box>
-        <Input mt='15px' />
+        <Input mt='15px' value={newItem} onChange={(e:any) => setNewItem(e.target.value)}/>
         <ButtonGroup gap='1' display={'flex'} justifyContent={'flex-end'}>
-            <Button mt='10px' fontWeight={800}>+</Button>
+            <Button mt='10px' fontWeight={800} onClick={()=> {addNewItem(newItem); setNewItem('')}}>+</Button>
         </ButtonGroup>
     </CardBody>
 </>

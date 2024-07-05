@@ -16,12 +16,27 @@ export default function RecipeForm({currentStepIndex, setCurrentStepIndex} : IFo
         newInstructions.splice(index, 1)
         setRecipeInstructions(newInstructions)
     }
+    function addNewInstruction(newItem: any){
+        if(newItem !== ''){
+            const newInstructions = [... recipeInstructions]
+            newInstructions.push({item: newItem})
+            setRecipeInstructions(newInstructions)
+        }
+    }
     
     const [recipeIngredients, setRecipeIngredients] = useState([{item: 'lalal'}, {item: 'lelel'}, {item: 'lilili'}, ])
     function removeIngredient(index: number){
         const newIngredients = [... recipeIngredients]
         newIngredients.splice(index, 1)
         setRecipeIngredients(newIngredients)
+    }
+
+    function addNewIngredient(newItem: any){
+        if(newItem !== ''){
+            const newIngredients = [... recipeIngredients]
+            newIngredients.push({item: newItem})
+            setRecipeIngredients(newIngredients)
+        }
     }
 
   return (
@@ -41,14 +56,14 @@ export default function RecipeForm({currentStepIndex, setCurrentStepIndex} : IFo
             {/* Ingredients form */}
             {currentStepIndex === 1 && 
                 <>
-                <SubFormCard heading='Ingredients' recipeItems={recipeIngredients} removeItem={removeIngredient} />
+                <SubFormCard heading='Ingredients' recipeItems={recipeIngredients} removeItem={removeIngredient} addNewItem={addNewIngredient}/>
                 </>
             }
 
             {/* Instructions form */}
             {currentStepIndex === 2 && 
                 <>
-                <SubFormCard heading='instructions' recipeItems={recipeInstructions} removeItem={removeInstruction} />
+                <SubFormCard heading='instructions' recipeItems={recipeInstructions} removeItem={removeInstruction} addNewItem={addNewInstruction}/>
                 </>
             }
 
