@@ -24,7 +24,7 @@ export default function SubFormCard({heading, recipeItems, removeItem, addNewIte
             {recipeItems.map((item, index) => (
                 <>
                 <Stack mb='15px' display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
-                    <Text> - {item.item}</Text>
+                    <Text> {index + 1}. {item.item}</Text>
                     <Text variant={'outline'} fontSize={'12px'} cursor={'pointer'} color={'red'} onClick={()=> removeItem(index)}>X</Text>
                 </Stack>
                 </>

@@ -12,7 +12,7 @@ export default function Dashboard() {
       <Flex align={'center'} justify={'right'}>
       <Button onClick={onOpen} variant='outline' mt='30px' mr='35px' colorScheme='teal'>
           Create new recipe
-        </Button>
+      </Button>
       </Flex>
 
       <CardsContainer />

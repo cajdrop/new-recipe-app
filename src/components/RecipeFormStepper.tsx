@@ -20,8 +20,9 @@ import { Dispatch, SetStateAction } from 'react';
 
   const steps = [
     { title: 'First', description: 'Title' },
-    { title: 'Second', description: 'Ingredients' },
-    { title: 'Third', description: 'Instructions' },
+    { title: 'Second', description: 'Description' },
+    { title: 'Third', description: 'Ingredients' },
+    { title: 'Fourth', description: 'Instructions' },
   ]
   
 

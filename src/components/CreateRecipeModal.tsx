@@ -23,7 +23,7 @@ export default function CreateRecipeModal({isOpen, onClose}: IModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
     <ModalOverlay />
-    <ModalContent>
+    <ModalContent  maxWidth={'45vw'}>
       <ModalHeader>Add a new recipe</ModalHeader>
       <ModalCloseButton />
       <ModalBody>

@@ -1,4 +1,4 @@
-import { Box, Card, CardHeader, CardFooter, CardBody, Heading, Input, Button, Text, ButtonGroup, Stack } from "@chakra-ui/react";
+import { Box, Card, CardHeader, CardFooter, CardBody, Heading, Input, Button, Textarea } from "@chakra-ui/react";
 import { Dispatch, SetStateAction, useState } from 'react';
 import SubFormCard from "./SubFormCard";
 
@@ -53,15 +53,26 @@ export default function RecipeForm({currentStepIndex, setCurrentStepIndex} : IFo
                 </>
             }
 
-            {/* Ingredients form */}
             {currentStepIndex === 1 && 
+                <>
+                <CardHeader>
+                    <Heading size='md'>Description</Heading>
+                </CardHeader>
+                <CardBody>
+                    <Textarea />
+                </CardBody>
+                </>
+            }
+
+            {/* Ingredients form */}
+            {currentStepIndex === 2 && 
                 <>
                 <SubFormCard heading='Ingredients' recipeItems={recipeIngredients} removeItem={removeIngredient} addNewItem={addNewIngredient}/>
                 </>
             }
 
             {/* Instructions form */}
-            {currentStepIndex === 2 && 
+            {currentStepIndex === 3 && 
                 <>
                 <SubFormCard heading='instructions' recipeItems={recipeInstructions} removeItem={removeInstruction} addNewItem={addNewInstruction}/>
                 </>
@@ -71,7 +82,7 @@ export default function RecipeForm({currentStepIndex, setCurrentStepIndex} : IFo
                 {currentStepIndex > 0 &&
                 <Button color={'teal'} onClick={() => setCurrentStepIndex(currentStepIndex - 1)}>Back</Button>
                 }
-                {currentStepIndex < 2 && 
+                {currentStepIndex < 3 && 
                     <Button color={'teal'} onClick={() => setCurrentStepIndex(currentStepIndex + 1)}>Next</Button>
                 }
             </CardFooter>

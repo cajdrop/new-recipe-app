@@ -6,7 +6,7 @@ export default function AppHeader() {
     <Container maxW="100vw" pt="20px" pb="20px" bg='teal' color='white'>
         <Grid templateColumns='repeat(5, 1fr)' pl='25px' pr='25px' gap={4}>
             <GridItem colSpan={2} h='10'>
-                <Heading>
+                <Heading as={ReactRouterLink} to='/dashboard'>
                     My recipes
                 </Heading>
             </GridItem>

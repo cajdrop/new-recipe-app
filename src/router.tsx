@@ -13,7 +13,7 @@ export const router = createBrowserRouter([
       element: <Dashboard />
     },
     {
-      path: '/recipe-details',
+      path: '/recipe-details/:index',
       element: <RecipeDetails />
     }
   ])
