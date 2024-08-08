@@ -11,7 +11,7 @@ interface IRecipeDetails{
 interface IRecipeCard {
     recipeDetails: IRecipeDetails;
     index: number;
-    removeItem: (index: number) => void;
+    removeItem: () => void;
 }
 
 export default function RecipeCard({recipeDetails, index, removeItem}: IRecipeCard) {
@@ -19,7 +19,7 @@ export default function RecipeCard({recipeDetails, index, removeItem}: IRecipeCa
     <Card color={'#718096'}>
         <CardHeader display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
             <Heading size='md'>{recipeDetails.title}</Heading>
-            <Text fontSize={'14px'} cursor={'pointer'} color={'red'} onClick={()=> removeItem(index)}>X</Text>
+            <Text fontSize={'14px'} cursor={'pointer'} color={'red'} onClick={()=> removeItem()}>X</Text>
         </CardHeader>
         <CardBody>
             <Text>{recipeDetails.description}</Text>

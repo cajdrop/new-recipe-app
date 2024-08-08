@@ -5,6 +5,7 @@ import { Container, Flex, Card, CardHeader, CardBody, CardFooter, Heading, Stack
 import { useEffect, useState } from 'react'
 import { get, ref, remove} from 'firebase/database'
 import { database } from '../firebaseConfig.js'
+import { removeRecipe } from '../Api'
 
 export default function RecipeDetails() {
     const navigate = useNavigate()
@@ -27,9 +28,8 @@ export default function RecipeDetails() {
       getRecipes()
     }, [])
 
-    const removeRecipe = async () => {
-      const recipesDetailsRef = ref(database, 'recipes/'+ recipeIndex)
-      await remove(recipesDetailsRef)
+    const handleRemoveRecipe = async () => {
+      removeRecipe(Number(recipeIndex))
       navigate('/dashboard')
   }
 
@@ -84,7 +84,7 @@ export default function RecipeDetails() {
               <Divider />
               <CardFooter>
                 <ButtonGroup spacing='2'>
-                  <Button variant='outline' colorScheme='teal' onClick={() => {removeRecipe()}}>
+                  <Button variant='outline' colorScheme='teal' onClick={() => {handleRemoveRecipe()}}>
                     Delete
                   </Button>
                   <Button variant='solid' colorScheme='teal'>
