@@ -1,53 +1,36 @@
 import { Container, Grid } from '@chakra-ui/react'
 import RecipeCard from './RecipeCard'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { get, ref, remove } from 'firebase/database'
+import { database } from '../firebaseConfig.js'
 
 
 export default function CardsContainer() {
 
-    const [recipesDetails, setRecipesDetails]= useState([
-        {
-            title: 'Customer dashboard 1',
-            description: 'View a summary of all your customers over the last month.',
-            ingredients: ['lalala', 'lelelel', 'lilili'],
-            instructions: ['lalala', 'lelelel', 'lilili']
-        },
-        {
-            title: 'Customer dashboard 2',
-            description: 'View a summary of all your customers over the last month.',
-            ingredients: ['lalala', 'lelelel', 'lilili'],
-            instructions: ['lalala', 'lelelel', 'lilili']
-        },
-        {
-            title: 'Customer dashboard 3',
-            description: 'View a summary of all your customers over the last month.',
-            ingredients: ['lalala', 'lelelel', 'lilili'],
-            instructions: ['lalala', 'lelelel', 'lilili']
-        },
-        {
-            title: 'Customer dashboard 4',
-            description: 'View a summary of all your customers over the last month.',
-            ingredients: ['lalala', 'lelelel', 'lilili'],
-            instructions: ['lalala', 'lelelel', 'lilili']
-        },
-        {
-            title: 'Customer dashboard 5',
-            description: 'View a summary of all your customers over the last month.',
-            ingredients: ['lalala', 'lelelel', 'lilili'],
-            instructions: ['lalala', 'lelelel', 'lilili']
-        },
-        {
-            title: 'Customer dashboard 6',
-            description: 'View a summary of all your customers over the last month.',
-            ingredients: ['lalala', 'lelelel', 'lilili'],
-            instructions: ['lalala', 'lelelel', 'lilili']
-        },
-    ])
+    const [recipesDetails, setRecipesDetails]= useState([])
 
-    function removeRecipe(index: number){
-        const newRecipesDetails = [... recipesDetails]
-        newRecipesDetails.splice(index, 1)
-        setRecipesDetails(newRecipesDetails)
+    const getRecipes = async () => {
+        const recipesDetailsRef = ref(database, 'recipes')
+        await get(recipesDetailsRef).then((snapshot: any) => {
+            if (snapshot.exists()){
+                const recipesArray = snapshot.val()
+                setRecipesDetails(recipesArray)
+                console.log(recipesArray, 'recipes')
+            }else{
+                console.log('no data')
+            }
+        })
+    }
+
+    useEffect(() => {
+        getRecipes()
+    }, [])
+
+    const removeRecipe = async (index: number) => {
+        const recipesDetailsRef = ref(database, 'recipes/'+index)
+        await remove(recipesDetailsRef)
+
+        getRecipes()
     }
 
   return (

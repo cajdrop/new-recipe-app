@@ -1,48 +1,39 @@
 import React from 'react'
 import AppHeader from '../components/AppHeader'
-import { Link as ReactRouterLink } from 'react-router-dom'
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom'
 import { Container, Flex, Card, CardHeader, CardBody, CardFooter, Heading, Stack, StackDivider, Divider, Box, Text, ButtonGroup, Button } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { get, ref, remove} from 'firebase/database'
+import { database } from '../firebaseConfig.js'
 
 export default function RecipeDetails() {
+    const navigate = useNavigate()
+    const [recipesDetails, setRecipesDetails]= useState<any[]>([])
 
-  const recipesDetails = [
-        {
-            title: 'Customer dashboard 1',
-            description: 'View a summary of all your customers over the last month.',
-            ingredients: ['lalala', 'lelelel', 'lilili'],
-            instructions: ['lalala', 'lelelel', 'lilili']
-        },
-        {
-            title: 'Customer dashboard 2',
-            description: 'View a summary of all your customers over the last month.',
-            ingredients: ['lalala', 'lelelel', 'lilili'],
-            instructions: ['lalala', 'lelelel', 'lilili']
-        },
-        {
-            title: 'Customer dashboard 3',
-            description: 'View a summary of all your customers over the last month.',
-            ingredients: ['lalala', 'lelelel', 'lilili'],
-            instructions: ['lalala', 'lelelel', 'lilili']
-        },
-        {
-            title: 'Customer dashboard 4',
-            description: 'View a summary of all your customers over the last month.',
-            ingredients: ['lalala', 'lelelel', 'lilili'],
-            instructions: ['lalala', 'lelelel', 'lilili']
-        },
-        {
-            title: 'Customer dashboard 5',
-            description: 'View a summary of all your customers over the last month.',
-            ingredients: ['lalala', 'lelelel', 'lilili'],
-            instructions: ['lalala', 'lelelel', 'lilili']
-        },
-        {
-            title: 'Customer dashboard 6',
-            description: 'View a summary of all your customers over the last month.',
-            ingredients: ['lalala', 'lelelel', 'lilili'],
-            instructions: ['lalala', 'lelelel', 'lilili']
-        },
-    ]
+    const getRecipes = async () => {
+        const recipesDetailsRef = ref(database, 'recipes')
+        await get(recipesDetailsRef).then((snapshot: any) => {
+            if (snapshot.exists()){
+                const recipesArray = snapshot.val()
+                setRecipesDetails(recipesArray)
+                console.log(recipesArray, 'recipes')
+            }else{
+                console.log('no data')
+            }
+        })
+    }
+
+    useEffect(() => {
+      getRecipes()
+    }, [])
+
+    const removeRecipe = async () => {
+      const recipesDetailsRef = ref(database, 'recipes/'+ recipeIndex)
+      await remove(recipesDetailsRef)
+      navigate('/dashboard')
+  }
+
+
     const recipeIndex = window.location.href.split("/").pop()
     const currentRecipe = recipesDetails.find((x, index) => index === Number(recipeIndex))
   return (
@@ -54,6 +45,7 @@ export default function RecipeDetails() {
       </Button>
       </Flex>
       <Container mt='10px'>
+        {currentRecipe &&
               <Card color={'#718096'}>
               <CardHeader>
                 <Heading size='md'>{currentRecipe.title}</Heading>
@@ -70,7 +62,7 @@ export default function RecipeDetails() {
                     <Heading size='xs' textTransform='uppercase'>
                       Ingredients
                     </Heading>
-                    {currentRecipe.ingredients.map((ingredient, index) => (
+                    {currentRecipe.ingredients.map((ingredient: string, index: number) => (
                       <Text pt='2' fontSize='sm'>
                         {index + 1}. {ingredient}
                       </Text>
@@ -81,7 +73,7 @@ export default function RecipeDetails() {
                     <Heading size='xs' textTransform='uppercase'>
                       Instructions
                     </Heading>
-                    {currentRecipe.instructions.map((instruction, index) => (
+                    {currentRecipe.instructions.map((instruction: string, index: number) => (
                       <Text pt='2' fontSize='sm'>
                         {index + 1}. {instruction}
                       </Text>
@@ -92,7 +84,7 @@ export default function RecipeDetails() {
               <Divider />
               <CardFooter>
                 <ButtonGroup spacing='2'>
-                  <Button variant='outline' colorScheme='teal'>
+                  <Button variant='outline' colorScheme='teal' onClick={() => {removeRecipe()}}>
                     Delete
                   </Button>
                   <Button variant='solid' colorScheme='teal'>
@@ -101,6 +93,8 @@ export default function RecipeDetails() {
                 </ButtonGroup>
               </CardFooter>
             </Card>
+
+        }
 
       </Container>
     </>
