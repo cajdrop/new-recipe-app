@@ -7,6 +7,8 @@ import { get, ref, remove} from 'firebase/database'
 import { database } from '../firebaseConfig.js'
 import { removeRecipe } from '../Api'
 
+
+
 export default function RecipeDetails() {
     const navigate = useNavigate()
     const [recipesDetails, setRecipesDetails]= useState<any[]>([])
@@ -62,9 +64,9 @@ export default function RecipeDetails() {
                     <Heading size='xs' textTransform='uppercase'>
                       Ingredients
                     </Heading>
-                    {currentRecipe.ingredients.map((ingredient: string, index: number) => (
+                    {currentRecipe.ingredients.map((ingredient: {item: string}, index: number) => (
                       <Text pt='2' fontSize='sm'>
-                        {index + 1}. {ingredient}
+                        {index + 1}. {ingredient.item}
                       </Text>
                     ))}
 
@@ -73,9 +75,9 @@ export default function RecipeDetails() {
                     <Heading size='xs' textTransform='uppercase'>
                       Instructions
                     </Heading>
-                    {currentRecipe.instructions.map((instruction: string, index: number) => (
+                    {currentRecipe.instructions.map((instruction: {item: string}, index: number) => (
                       <Text pt='2' fontSize='sm'>
-                        {index + 1}. {instruction}
+                        {index + 1}. {instruction.item}
                       </Text>
                     ))}
                   </Box>

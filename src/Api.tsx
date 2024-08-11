@@ -1,17 +1,25 @@
-import { get, ref, remove } from 'firebase/database'
+import { get, ref, remove, set } from 'firebase/database'
 import { database } from './firebaseConfig.js'
 
-export const getRecipeDetails = () => {
+export const getRecipeDetails = async () => {
     const recipesDetailsRef = ref(database, 'recipes')
-    get(recipesDetailsRef).then((snapshot: any) => {
+    await get(recipesDetailsRef).then((snapshot: any) => {
         if (snapshot.exists()){
             const recipesArray = snapshot.val()
-            console.log(recipesArray, 'array')
+            console.log(snapshot.val(), 'array')
             return recipesArray
         }else{
             console.log('no data')
         }
     })
+}
+
+let recipesLength = 0
+export const addNewRecipe = async (data: Object) => {
+    console.log(getRecipeDetails(), 'getrei')
+    const recipesDetailsRef = ref(database, 'recipes/' + recipesLength)
+    recipesLength++
+    await set(recipesDetailsRef, {...data})
 }
 
 export const removeRecipe = async (index: number) => {

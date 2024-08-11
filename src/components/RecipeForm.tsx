@@ -1,92 +1,115 @@
 import { Box, Card, CardHeader, CardFooter, CardBody, Heading, Input, Button, Textarea } from "@chakra-ui/react";
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import SubFormCard from "./SubFormCard";
+import { IFormRequestedFields } from "../ts/FormRequestedFields";
+import { UseFormRegister, FieldErrors } from "react-hook-form"
 
 interface IFormProps {
     currentStepIndex: number;
     setCurrentStepIndex: Dispatch<SetStateAction<number>>;
+    register: UseFormRegister<IFormRequestedFields>;
+    errors: FieldErrors;
+    listOfIngredients: Array<IRecipeItems>;
+    setListOfIngredients: Dispatch<SetStateAction<Array<IRecipeItems>>>
+    listOfInstructions: Array<IRecipeItems>;
+    setListOfInstructions: Dispatch<SetStateAction<Array<IRecipeItems>>>
   }
+
+interface IRecipeItems {
+    item: string;
+}
   
-export default function RecipeForm({currentStepIndex, setCurrentStepIndex} : IFormProps) {
+export default function RecipeForm({currentStepIndex, setCurrentStepIndex, register, errors, setListOfIngredients, listOfIngredients, setListOfInstructions, listOfInstructions} : IFormProps) {
+    const [isIngredientsEmpty, setIsIngredientsEmpty] = useState(false)
 
-
-    const [recipeInstructions, setRecipeInstructions] = useState([{item: 'lalal'}, {item: 'lelel'}, {item: 'lilili'}, ])
     function removeInstruction(index: number){
-        const newInstructions = [... recipeInstructions]
+        const newInstructions = [... listOfInstructions]
         newInstructions.splice(index, 1)
-        setRecipeInstructions(newInstructions)
+        setListOfInstructions(newInstructions)
     }
     function addNewInstruction(newItem: any){
         if(newItem !== ''){
-            const newInstructions = [... recipeInstructions]
+            const newInstructions = [... listOfInstructions]
             newInstructions.push({item: newItem})
-            setRecipeInstructions(newInstructions)
+            setListOfInstructions(newInstructions)
         }
     }
     
-    const [recipeIngredients, setRecipeIngredients] = useState([{item: 'lalal'}, {item: 'lelel'}, {item: 'lilili'}, ])
     function removeIngredient(index: number){
-        const newIngredients = [... recipeIngredients]
+        const newIngredients = [... listOfIngredients]
         newIngredients.splice(index, 1)
-        setRecipeIngredients(newIngredients)
+        setListOfIngredients(newIngredients)
     }
 
     function addNewIngredient(newItem: any){
         if(newItem !== ''){
-            const newIngredients = [... recipeIngredients]
+            const newIngredients: any[] = [... listOfIngredients]
             newIngredients.push({item: newItem})
-            setRecipeIngredients(newIngredients)
+            setListOfIngredients(newIngredients)
         }
     }
 
+    function handleNext(){
+        if(currentStepIndex === 2 && listOfIngredients.length < 1){
+            console.log('nope')
+        }else{
+            setCurrentStepIndex(currentStepIndex + 1)
+        }
+        
+    }
+
   return (
-    <Box mt='30px' mb='30px'>
-        <Card color={'#718096'}>
-            {currentStepIndex === 0 && 
-                <>
-                <CardHeader>
-                    <Heading size='md'> Recipe title</Heading>
-                </CardHeader>
-                <CardBody>
-                    <Input />
-                </CardBody>
-                </>
-            }
-
-            {currentStepIndex === 1 && 
-                <>
-                <CardHeader>
-                    <Heading size='md'>Description</Heading>
-                </CardHeader>
-                <CardBody>
-                    <Textarea />
-                </CardBody>
-                </>
-            }
-
-            {/* Ingredients form */}
-            {currentStepIndex === 2 && 
-                <>
-                <SubFormCard heading='Ingredients' recipeItems={recipeIngredients} removeItem={removeIngredient} addNewItem={addNewIngredient}/>
-                </>
-            }
-
-            {/* Instructions form */}
-            {currentStepIndex === 3 && 
-                <>
-                <SubFormCard heading='instructions' recipeItems={recipeInstructions} removeItem={removeInstruction} addNewItem={addNewInstruction}/>
-                </>
-            }
-
-            <CardFooter>
-                {currentStepIndex > 0 &&
-                <Button color={'teal'} onClick={() => setCurrentStepIndex(currentStepIndex - 1)}>Back</Button>
+        <Box mt='30px' mb='30px'>
+            <Card color={'#718096'}>
+                {currentStepIndex === 0 && 
+                    <>
+                    <CardHeader>
+                        <Heading size='md'> Recipe title</Heading>
+                    </CardHeader>
+                    <CardBody>
+                        <Input {...register("title", { required: true })}/>
+                        {errors.title && <span>This field is required.</span>}
+                    </CardBody>
+                    </>
                 }
-                {currentStepIndex < 3 && 
-                    <Button color={'teal'} onClick={() => setCurrentStepIndex(currentStepIndex + 1)}>Next</Button>
+
+                {currentStepIndex === 1 && 
+                    <>
+                    <CardHeader>
+                        <Heading size='md'>Description</Heading>
+                    </CardHeader>
+                    <CardBody>
+                        <Textarea {...register("description", { required: true })}/>
+                        {errors.description && <span>This field is required.</span>}
+                    </CardBody>
+                    </>
                 }
-            </CardFooter>
-        </Card>
-    </Box>
+
+                {/* Ingredients form */}
+                {currentStepIndex === 2 && 
+                    <>
+                    <SubFormCard heading='Ingredients' recipeItems={listOfIngredients} removeItem={removeIngredient} addNewItem={addNewIngredient}/>
+                    {listOfIngredients.length < 1 && <span>Add at least one ingredient.</span>}
+                    </>
+                }
+
+                {/* Instructions form */}
+                {currentStepIndex === 3 && 
+                    <>
+                    <SubFormCard heading='instructions' recipeItems={listOfInstructions} removeItem={removeInstruction} addNewItem={addNewInstruction}/>
+                    {listOfInstructions.length < 1 && <span>Add at least one instruction.</span>}
+                    </>
+                }
+
+                <CardFooter>
+                    {currentStepIndex > 0 &&
+                    <Button color={'teal'} onClick={() => setCurrentStepIndex(currentStepIndex - 1)}>Back</Button>
+                    }
+                    {currentStepIndex < 3 && 
+                    <Button color={'teal'} onClick={() => handleNext()}>Next</Button>
+                    }
+                </CardFooter>
+            </Card>
+        </Box>
   )
 }
