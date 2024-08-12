@@ -10,7 +10,7 @@ import {
   } from '@chakra-ui/react'
 import RecipeFormStepper from './RecipeFormStepper';
 import RecipeForm from './RecipeForm';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form"
 import { IFormRequestedFields } from '../ts/FormRequestedFields';
 import { addNewRecipe } from '../Api';
@@ -23,9 +23,11 @@ interface IRecipeItems {
 interface IModalProps {
     isOpen: boolean;
     onClose: () => void;
+    currentRecipe?: any;
+    isEdit: boolean
   }
 
-export default function CreateRecipeModal({isOpen, onClose}: IModalProps) {
+export default function CreateRecipeModal({isOpen, onClose, currentRecipe, isEdit}: IModalProps) {
 
   const {
     handleSubmit,
@@ -51,6 +53,10 @@ export default function CreateRecipeModal({isOpen, onClose}: IModalProps) {
     const [currentStepIndex, setCurrentStepIndex] = useState(0)
     const [listOfIngredients, setListOfIngredients] = useState(Array<IRecipeItems>)
     const [listOfInstructions, setListOfInstructions] = useState(Array<IRecipeItems>)
+
+    useEffect(()=>{
+      console.log(currentRecipe, 'currentaaaa')
+  }, [])
     
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -62,12 +68,12 @@ export default function CreateRecipeModal({isOpen, onClose}: IModalProps) {
       <ModalBody>
         <RecipeFormStepper currentStepIndex={currentStepIndex} setCurrentStepIndex={setCurrentStepIndex} />
 
-          <RecipeForm errors={errors} register={register} currentStepIndex={currentStepIndex} setCurrentStepIndex={setCurrentStepIndex} listOfIngredients={listOfIngredients} setListOfIngredients={setListOfIngredients} listOfInstructions={listOfInstructions} setListOfInstructions={setListOfInstructions} />
+          <RecipeForm isEdit={isEdit} currentRecipe={currentRecipe} errors={errors} register={register} currentStepIndex={currentStepIndex} setCurrentStepIndex={setCurrentStepIndex} listOfIngredients={listOfIngredients} setListOfIngredients={setListOfIngredients} listOfInstructions={listOfInstructions} setListOfInstructions={setListOfInstructions} />
 
       </ModalBody>
 
       <ModalFooter>
-        <Button variant='outline' colorScheme='teal' onClick={handleSubmit(onSubmit)}>Add recipe</Button>
+        <Button variant='outline' colorScheme='teal' onClick={handleSubmit(onSubmit)}>{isEdit ? 'Update recipe' : 'Add recipe'}</Button>
       </ModalFooter>
     </ModalContent>
     </form>

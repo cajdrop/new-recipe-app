@@ -13,14 +13,15 @@ interface IFormProps {
     setListOfIngredients: Dispatch<SetStateAction<Array<IRecipeItems>>>
     listOfInstructions: Array<IRecipeItems>;
     setListOfInstructions: Dispatch<SetStateAction<Array<IRecipeItems>>>
+    currentRecipe: any;
+    isEdit: boolean
   }
 
 interface IRecipeItems {
     item: string;
 }
   
-export default function RecipeForm({currentStepIndex, setCurrentStepIndex, register, errors, setListOfIngredients, listOfIngredients, setListOfInstructions, listOfInstructions} : IFormProps) {
-    const [isIngredientsEmpty, setIsIngredientsEmpty] = useState(false)
+export default function RecipeForm({currentStepIndex, setCurrentStepIndex, register, errors, setListOfIngredients, listOfIngredients, setListOfInstructions, listOfInstructions, currentRecipe, isEdit} : IFormProps) {
 
     function removeInstruction(index: number){
         const newInstructions = [... listOfInstructions]
@@ -58,6 +59,14 @@ export default function RecipeForm({currentStepIndex, setCurrentStepIndex, regis
         
     }
 
+    useEffect(()=>{
+        if(isEdit){
+            setListOfIngredients(currentRecipe.ingredients)
+            setListOfInstructions(currentRecipe.instructions)
+        }
+        console.log(currentRecipe, 'current')
+    }, [])
+
   return (
         <Box mt='30px' mb='30px'>
             <Card color={'#718096'}>
@@ -67,7 +76,7 @@ export default function RecipeForm({currentStepIndex, setCurrentStepIndex, regis
                         <Heading size='md'> Recipe title</Heading>
                     </CardHeader>
                     <CardBody>
-                        <Input {...register("title", { required: true })}/>
+                        <Input {...register("title", { required: true })} defaultValue={currentRecipe.title}/>
                         {errors.title && <span>This field is required.</span>}
                     </CardBody>
                     </>
@@ -79,7 +88,7 @@ export default function RecipeForm({currentStepIndex, setCurrentStepIndex, regis
                         <Heading size='md'>Description</Heading>
                     </CardHeader>
                     <CardBody>
-                        <Textarea {...register("description", { required: true })}/>
+                        <Textarea {...register("description", { required: true })} defaultValue={currentRecipe.description}/>
                         {errors.description && <span>This field is required.</span>}
                     </CardBody>
                     </>

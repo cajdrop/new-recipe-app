@@ -1,17 +1,20 @@
 import React from 'react'
 import AppHeader from '../components/AppHeader'
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom'
-import { Container, Flex, Card, CardHeader, CardBody, CardFooter, Heading, Stack, StackDivider, Divider, Box, Text, ButtonGroup, Button } from '@chakra-ui/react'
+import { Container, Flex, Card, CardHeader, CardBody, CardFooter, Heading, Stack, StackDivider, Divider, Box, Text, ButtonGroup, Button, useDisclosure } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { get, ref, remove} from 'firebase/database'
+import { get, ref} from 'firebase/database'
 import { database } from '../firebaseConfig.js'
 import { removeRecipe } from '../Api'
+import CreateRecipeModal from '../components/CreateRecipeModal'
 
 
 
 export default function RecipeDetails() {
+    const { isOpen, onOpen, onClose } = useDisclosure()
     const navigate = useNavigate()
     const [recipesDetails, setRecipesDetails]= useState<any[]>([])
+    const [isEdit, setIsEdit] = useState(false)
 
     const getRecipes = async () => {
         const recipesDetailsRef = ref(database, 'recipes')
@@ -89,7 +92,7 @@ export default function RecipeDetails() {
                   <Button variant='outline' colorScheme='teal' onClick={() => {handleRemoveRecipe()}}>
                     Delete
                   </Button>
-                  <Button variant='solid' colorScheme='teal'>
+                  <Button variant='solid' colorScheme='teal' onClick={() => {onOpen(); setIsEdit(true)}}>
                     Edit
                   </Button>
                 </ButtonGroup>
@@ -99,6 +102,7 @@ export default function RecipeDetails() {
         }
 
       </Container>
+      <CreateRecipeModal isEdit={isEdit} currentRecipe={currentRecipe} isOpen={isOpen} onClose={onClose}/>
     </>
   )
 }

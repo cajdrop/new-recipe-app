@@ -16,7 +16,7 @@ export default function Dashboard() {
       </Flex>
 
       <CardsContainer />
-      <CreateRecipeModal isOpen={isOpen} onClose={onClose}/>
+      <CreateRecipeModal isEdit={false} isOpen={isOpen} onClose={onClose}/>
     </>
   )
 }
