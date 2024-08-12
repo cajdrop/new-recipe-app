@@ -39,8 +39,8 @@ export default function RecipeDetails() {
   }
 
 
-    const recipeIndex = window.location.href.split("/").pop()
-    const currentRecipe = recipesDetails.find((x, index) => index === Number(recipeIndex))
+    const recipeIndex = Number(window.location.href.split("/").pop())
+    const currentRecipe = recipesDetails.find((x, index) => index === recipeIndex)
   return (
     <>
       <AppHeader />
@@ -102,7 +102,7 @@ export default function RecipeDetails() {
         }
 
       </Container>
-      <CreateRecipeModal isEdit={isEdit} currentRecipe={currentRecipe} isOpen={isOpen} onClose={onClose}/>
+      <CreateRecipeModal isEdit={isEdit} recipeIndex={recipeIndex} currentRecipe={currentRecipe} isOpen={isOpen} onClose={onClose}/>
     </>
   )
 }

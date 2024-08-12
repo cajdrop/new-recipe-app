@@ -13,7 +13,7 @@ import RecipeForm from './RecipeForm';
 import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form"
 import { IFormRequestedFields } from '../ts/FormRequestedFields';
-import { addNewRecipe } from '../Api';
+import { addNewRecipe, updateRecipe } from '../Api';
 
 
 interface IRecipeItems {
@@ -24,10 +24,11 @@ interface IModalProps {
     isOpen: boolean;
     onClose: () => void;
     currentRecipe?: any;
+    recipeIndex?: number
     isEdit: boolean
   }
 
-export default function CreateRecipeModal({isOpen, onClose, currentRecipe, isEdit}: IModalProps) {
+export default function CreateRecipeModal({isOpen, onClose, currentRecipe, isEdit, recipeIndex}: IModalProps) {
 
   const {
     handleSubmit,
@@ -37,15 +38,27 @@ export default function CreateRecipeModal({isOpen, onClose, currentRecipe, isEdi
   } = useForm<IFormRequestedFields>()
   const onSubmit: SubmitHandler<IFormRequestedFields> = async (data) =>{
     if(data && listOfIngredients.length > 0 && listOfInstructions.length > 0){
-      addNewRecipe({
-        title: data.title,
-        description: data.description,
-        ingredients: listOfIngredients,
-        instructions: listOfInstructions
-      })
+      console.log(data, 'LAAAAAAAA')
+
+      if(isEdit && recipeIndex){
+        updateRecipe({
+          title: data.title ? data.title : currentRecipe.title,
+          description: data.description ? data.description : currentRecipe.description,
+          ingredients: listOfIngredients,
+          instructions: listOfInstructions
+        }, recipeIndex)
+      }else{
+        addNewRecipe({
+          title: data.title,
+          description: data.description,
+          ingredients: listOfIngredients,
+          instructions: listOfInstructions
+        })
+      }
       reset()
       setCurrentStepIndex(0)
-      console.log(data, 'la data')
+      setListOfIngredients([])
+      setListOfInstructions([])
       onClose()
     }
   }
@@ -53,10 +66,6 @@ export default function CreateRecipeModal({isOpen, onClose, currentRecipe, isEdi
     const [currentStepIndex, setCurrentStepIndex] = useState(0)
     const [listOfIngredients, setListOfIngredients] = useState(Array<IRecipeItems>)
     const [listOfInstructions, setListOfInstructions] = useState(Array<IRecipeItems>)
-
-    useEffect(()=>{
-      console.log(currentRecipe, 'currentaaaa')
-  }, [])
     
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -73,7 +82,7 @@ export default function CreateRecipeModal({isOpen, onClose, currentRecipe, isEdi
       </ModalBody>
 
       <ModalFooter>
-        <Button variant='outline' colorScheme='teal' onClick={handleSubmit(onSubmit)}>{isEdit ? 'Update recipe' : 'Add recipe'}</Button>
+        <Button variant='outline' colorScheme='teal' isDisabled={currentStepIndex !==3} onClick={handleSubmit(onSubmit)}>{isEdit ? 'Update recipe' : 'Add recipe'}</Button>
       </ModalFooter>
     </ModalContent>
     </form>

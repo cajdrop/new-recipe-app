@@ -52,7 +52,6 @@ export default function RecipeForm({currentStepIndex, setCurrentStepIndex, regis
 
     function handleNext(){
         if(currentStepIndex === 2 && listOfIngredients.length < 1){
-            console.log('nope')
         }else{
             setCurrentStepIndex(currentStepIndex + 1)
         }
@@ -64,7 +63,6 @@ export default function RecipeForm({currentStepIndex, setCurrentStepIndex, regis
             setListOfIngredients(currentRecipe.ingredients)
             setListOfInstructions(currentRecipe.instructions)
         }
-        console.log(currentRecipe, 'current')
     }, [])
 
   return (
@@ -76,7 +74,7 @@ export default function RecipeForm({currentStepIndex, setCurrentStepIndex, regis
                         <Heading size='md'> Recipe title</Heading>
                     </CardHeader>
                     <CardBody>
-                        <Input {...register("title", { required: true })} defaultValue={currentRecipe.title}/>
+                        <Input {...register("title", { required: true })} defaultValue={isEdit ? currentRecipe.title : undefined}/>
                         {errors.title && <span>This field is required.</span>}
                     </CardBody>
                     </>
@@ -88,7 +86,7 @@ export default function RecipeForm({currentStepIndex, setCurrentStepIndex, regis
                         <Heading size='md'>Description</Heading>
                     </CardHeader>
                     <CardBody>
-                        <Textarea {...register("description", { required: true })} defaultValue={currentRecipe.description}/>
+                        <Textarea {...register("description", { required: true })} defaultValue={isEdit ? currentRecipe.description : undefined}/>
                         {errors.description && <span>This field is required.</span>}
                     </CardBody>
                     </>

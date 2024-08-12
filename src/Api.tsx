@@ -1,4 +1,4 @@
-import { get, ref, remove, set } from 'firebase/database'
+import { get, ref, remove, set, update } from 'firebase/database'
 import { database } from './firebaseConfig.js'
 
 export const getRecipeDetails = async () => {
@@ -25,4 +25,10 @@ export const addNewRecipe = async (data: Object) => {
 export const removeRecipe = async (index: number) => {
     const recipesDetailsRef = ref(database, 'recipes/' + index)
     await remove(recipesDetailsRef)
+}
+
+export const updateRecipe = async (data: object, index: number) => {
+    const recipesDetailsRef = ref(database, 'recipes/' + index)
+    console.log(data, recipesDetailsRef, 'TEEEEEEEEEEEST', index)
+    await update(recipesDetailsRef, {...data})
 }
