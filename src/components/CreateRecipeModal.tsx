@@ -10,7 +10,7 @@ import {
   } from '@chakra-ui/react'
 import RecipeFormStepper from './RecipeFormStepper';
 import RecipeForm from './RecipeForm';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm, SubmitHandler } from "react-hook-form"
 import { IFormRequestedFields } from '../ts/FormRequestedFields';
 import { addNewRecipe, updateRecipe } from '../Api';
@@ -26,9 +26,11 @@ interface IModalProps {
     currentRecipe?: any;
     recipeIndex?: number
     isEdit: boolean
+    getRecipes: () => void;
+    allRecipes: Array<{}>;
   }
 
-export default function CreateRecipeModal({isOpen, onClose, currentRecipe, isEdit, recipeIndex}: IModalProps) {
+export default function CreateRecipeModal({isOpen, onClose, currentRecipe, isEdit, recipeIndex, getRecipes, allRecipes}: IModalProps) {
 
   const {
     handleSubmit,
@@ -38,8 +40,6 @@ export default function CreateRecipeModal({isOpen, onClose, currentRecipe, isEdi
   } = useForm<IFormRequestedFields>()
   const onSubmit: SubmitHandler<IFormRequestedFields> = async (data) =>{
     if(data && listOfIngredients.length > 0 && listOfInstructions.length > 0){
-      console.log(data, 'LAAAAAAAA')
-
       if(isEdit && recipeIndex){
         updateRecipe({
           title: data.title ? data.title : currentRecipe.title,
@@ -53,12 +53,13 @@ export default function CreateRecipeModal({isOpen, onClose, currentRecipe, isEdi
           description: data.description,
           ingredients: listOfIngredients,
           instructions: listOfInstructions
-        })
+        }, allRecipes.length)
       }
       reset()
       setCurrentStepIndex(0)
       setListOfIngredients([])
       setListOfInstructions([])
+      getRecipes()
       onClose()
     }
   }

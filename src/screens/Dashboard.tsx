@@ -2,10 +2,26 @@ import AppHeader from '../components/AppHeader'
 import { Button, Flex, useDisclosure } from '@chakra-ui/react'
 import CardsContainer from '../components/CardsContainer'
 import CreateRecipeModal from '../components/CreateRecipeModal'
+import { get, ref } from 'firebase/database'
+import { database } from '../firebaseConfig.js'
+import { useState } from 'react'
 
 
 export default function Dashboard() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [allRecipes, setAllRecipes]= useState([])
+
+  const getRecipes = async () => {
+    const allRecipesRef = ref(database, 'recipes')
+    await get(allRecipesRef).then((snapshot: any) => {
+        if (snapshot.exists()){
+            const recipesArray = snapshot.val()
+            setAllRecipes(recipesArray)
+        }else{
+            console.log('no data')
+        }
+    })
+}
   return (
     <>
       <AppHeader />
@@ -15,8 +31,8 @@ export default function Dashboard() {
       </Button>
       </Flex>
 
-      <CardsContainer />
-      <CreateRecipeModal isEdit={false} isOpen={isOpen} onClose={onClose}/>
+      <CardsContainer getRecipes={getRecipes} allRecipes={allRecipes}/>
+      <CreateRecipeModal isEdit={false} isOpen={isOpen} onClose={onClose} getRecipes={getRecipes} allRecipes={allRecipes}/>
     </>
   )
 }

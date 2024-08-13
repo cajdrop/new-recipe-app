@@ -9,7 +9,7 @@ interface ISubFormProps {
     heading: string;
     recipeItems: Array<IRecipeItems>;
     removeItem: (index: number) => void;
-    addNewItem: (newItem: string) => void
+    addNewItem: (newItem: string) => void;
 }
 
 export default function SubFormCard({heading, recipeItems, removeItem, addNewItem}: ISubFormProps) {

@@ -1,4 +1,3 @@
-import React from 'react'
 import AppHeader from '../components/AppHeader'
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom'
 import { Container, Flex, Card, CardHeader, CardBody, CardFooter, Heading, Stack, StackDivider, Divider, Box, Text, ButtonGroup, Button, useDisclosure } from '@chakra-ui/react'
@@ -13,16 +12,15 @@ import CreateRecipeModal from '../components/CreateRecipeModal'
 export default function RecipeDetails() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const navigate = useNavigate()
-    const [recipesDetails, setRecipesDetails]= useState<any[]>([])
+    const [allRecipes, setAllRecipes]= useState<any[]>([])
     const [isEdit, setIsEdit] = useState(false)
 
     const getRecipes = async () => {
-        const recipesDetailsRef = ref(database, 'recipes')
-        await get(recipesDetailsRef).then((snapshot: any) => {
+        const allRecipesRef = ref(database, 'recipes')
+        await get(allRecipesRef).then((snapshot: any) => {
             if (snapshot.exists()){
                 const recipesArray = snapshot.val()
-                setRecipesDetails(recipesArray)
-                console.log(recipesArray, 'recipes')
+                setAllRecipes(recipesArray)
             }else{
                 console.log('no data')
             }
@@ -40,7 +38,7 @@ export default function RecipeDetails() {
 
 
     const recipeIndex = Number(window.location.href.split("/").pop())
-    const currentRecipe = recipesDetails.find((x, index) => index === recipeIndex)
+    const currentRecipe = allRecipes.find((x, index) => index === recipeIndex)
   return (
     <>
       <AppHeader />
@@ -102,7 +100,7 @@ export default function RecipeDetails() {
         }
 
       </Container>
-      <CreateRecipeModal isEdit={isEdit} recipeIndex={recipeIndex} currentRecipe={currentRecipe} isOpen={isOpen} onClose={onClose}/>
+      <CreateRecipeModal isEdit={isEdit} recipeIndex={recipeIndex} currentRecipe={currentRecipe} isOpen={isOpen} onClose={onClose} getRecipes={getRecipes} allRecipes={allRecipes}/>
     </>
   )
 }
