@@ -3,7 +3,7 @@ import { Button, Flex, useDisclosure } from '@chakra-ui/react'
 import CardsContainer from '../components/CardsContainer'
 import CreateRecipeModal from '../components/CreateRecipeModal'
 import { get, ref } from 'firebase/database'
-import { database } from '../firebaseConfig.js'
+import { database } from '../firebase/firebaseConfig.js'
 import { useState } from 'react'
 
 

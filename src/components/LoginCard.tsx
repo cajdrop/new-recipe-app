@@ -49,7 +49,7 @@ export default function LoginCard() {
                         ) : (
                         <Heading size='md'>Create a new account</Heading>
                     )}
-                    <LoginForm/>
+                    <LoginForm selectLoginAction={selectLoginAction}/>
 
                 </CardBody>
 

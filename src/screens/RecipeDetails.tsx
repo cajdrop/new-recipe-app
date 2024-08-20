@@ -3,7 +3,7 @@ import { Link as ReactRouterLink, useNavigate } from 'react-router-dom'
 import { Container, Flex, Card, CardHeader, CardBody, CardFooter, Heading, Stack, StackDivider, Divider, Box, Text, ButtonGroup, Button, useDisclosure } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { get, ref} from 'firebase/database'
-import { database } from '../firebaseConfig.js'
+import { database } from '../firebase/firebaseConfig.js'
 import { removeRecipe } from '../Api'
 import CreateRecipeModal from '../components/CreateRecipeModal'
 
